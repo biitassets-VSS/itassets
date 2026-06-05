@@ -14,15 +14,16 @@ interface Props {
 const CONDITIONS: ConditionStatus[] = ['Good', 'Pending', 'Issue Found', 'Damaged'];
 
 const CONDITION_COLORS: Record<ConditionStatus, string> = {
-  'Good': 'border-green-400 bg-green-50 dark:bg-green-950',
-  'Pending': 'border-orange-400 bg-orange-50 dark:bg-orange-950',
+  Good: 'border-green-400 bg-green-50 dark:bg-green-950',
+  Pending: 'border-orange-400 bg-orange-50 dark:bg-orange-950',
   'Issue Found': 'border-red-400 bg-red-50 dark:bg-red-950',
-  'Damaged': 'border-red-700 bg-red-100 dark:bg-red-950',
+  Damaged: 'border-red-700 bg-red-100 dark:bg-red-950',
 };
 
 export default function InspectionForm({ assignments, staffId, onSuccess }: Props) {
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
+
   const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
   const [form, setForm] = useState({
@@ -40,16 +41,23 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
       toast.error('Only JPG, JPEG, PNG, WEBP allowed');
       return false;
     }
+
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image must be under 5MB');
       return false;
     }
+
     return true;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.asset_id) { toast.error('Please select an asset'); return; }
+
+    if (!form.asset_id) {
+      toast.error('Please select an asset');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -58,25 +66,31 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
 
       for (let i = 0; i < 3; i++) {
         const file = photos[i];
+
         if (file) {
           const path = `inspections/${timestamp}/photo_${i + 1}_${file.name}`;
+
           const { data, error } = await supabase.storage
             .from('inspection-photos')
             .upload(path, file, { upsert: true });
-          if (!error) {
-            const { data: { publicUrl } } = supabase.storage
+
+          if (error) {
+            photoUrls.push(null);
+          } else {
+            const { data: publicData } = supabase.storage
               .from('inspection-photos')
               .getPublicUrl(data.path);
-            photoUrls.push(publicUrl);
-          } else {
-            photoUrls.push(null);
+
+            photoUrls.push(publicData.publicUrl);
           }
         } else {
           photoUrls.push(null);
         }
       }
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const { error } = await supabase.from('inspections').insert({
         ...form,
@@ -91,6 +105,15 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
 
       toast.success('Inspection submitted successfully!');
       onSuccess?.();
+
+      setForm({
+        asset_id: '',
+        inspection_date: new Date().toISOString().split('T')[0],
+        condition_status: 'Good',
+        notes: '',
+        comments: '',
+      });
+      setPhotos([null, null, null]);
     } catch (err: unknown) {
       toast.error((err as Error).message ?? 'Submission failed');
     } finally {
@@ -104,10 +127,10 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Asset Selection */}
       <div>
-        <label className="block text-xs font-medium text-gray-600
-                          dark:text-gray-400 mb-1">Asset *</label>
+        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+          Asset *
+        </label>
         <select
           value={form.asset_id}
           onChange={e => setForm(f => ({ ...f, asset_id: e.target.value }))}
@@ -123,10 +146,10 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
         </select>
       </div>
 
-      {/* Inspection Date */}
       <div>
-        <label className="block text-xs font-medium text-gray-600
-                          dark:text-gray-400 mb-1">Inspection Date *</label>
+        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+          Inspection Date *
+        </label>
         <input
           type="date"
           value={form.inspection_date}
@@ -136,21 +159,21 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
         />
       </div>
 
-      {/* Condition Status */}
       <div>
-        <label className="block text-xs font-medium text-gray-600
-                          dark:text-gray-400 mb-2">Condition Status *</label>
+        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+          Condition Status *
+        </label>
         <div className="grid grid-cols-2 gap-3">
           {CONDITIONS.map(c => (
             <button
               key={c}
               type="button"
               onClick={() => setForm(f => ({ ...f, condition_status: c }))}
-              className={`p-3 rounded-xl border-2 text-sm font-medium transition-all
-                ${form.condition_status === c
-                  ? CONDITION_COLORS[c] + ' border-indigo-500'
+              className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                form.condition_status === c
+                  ? `${CONDITION_COLORS[c]} text-gray-900 dark:text-white`
                   : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'
-                }`}
+              }`}
             >
               {c}
             </button>
@@ -158,11 +181,9 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
         </div>
       </div>
 
-      {/* Photo Uploads */}
       {[0, 1, 2].map(index => (
         <div key={index}>
-          <label className="block text-xs font-medium text-gray-600
-                            dark:text-gray-400 mb-1">
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
             Photo {index + 1} {index === 0 ? '*' : '(optional)'}
           </label>
           <input
@@ -171,27 +192,28 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
             onChange={e => {
               const file = e.target.files?.[0];
               if (file && validateImage(file)) {
-                const newPhotos = [...photos];
-                newPhotos[index] = file;
-                setPhotos(newPhotos);
+                setPhotos(prev => {
+                  const next = [...prev];
+                  next[index] = file;
+                  return next;
+                });
               }
             }}
-            className={`w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4
+            className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4
               file:rounded-lg file:border-0 file:text-sm file:font-medium
               file:bg-indigo-50 dark:file:bg-indigo-950 file:text-indigo-700
-              dark:file:text-indigo-300 hover:file:bg-indigo-100
-              ${photos[index] ? 'file:bg-green-50 dark:file:bg-green-950 file:text-green-700' : ''}`}
+              dark:file:text-indigo-300 hover:file:bg-indigo-100"
           />
           {photos[index] && (
-            <p className="text-xs text-green-600 mt-1">{photos[index]!.name}</p>
+            <p className="text-xs text-green-600 mt-1">{photos[index]?.name}</p>
           )}
         </div>
       ))}
 
-      {/* Notes */}
       <div>
-        <label className="block text-xs font-medium text-gray-600
-                          dark:text-gray-400 mb-1">Notes</label>
+        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+          Notes
+        </label>
         <textarea
           value={form.notes}
           onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
@@ -201,10 +223,10 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
         />
       </div>
 
-      {/* Comments */}
       <div>
-        <label className="block text-xs font-medium text-gray-600
-                          dark:text-gray-400 mb-1">Comments</label>
+        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+          Comments
+        </label>
         <textarea
           value={form.comments}
           onChange={e => setForm(f => ({ ...f, comments: e.target.value }))}
@@ -214,13 +236,11 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
         />
       </div>
 
-      {/* Submit Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500
-                   disabled:bg-indigo-300 text-white font-medium rounded-xl
-                   transition-all shadow-lg shadow-indigo-500/20"
+        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-300
+          text-white font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/20"
       >
         {loading ? 'Submitting...' : 'Submit Inspection'}
       </button>
