@@ -53,6 +53,15 @@ export interface Assignment {
   updated_at: string
 }
 
+export interface AssignmentFormData {
+  asset_id: string
+  staff_id: string
+  assigned_date: string
+  return_date?: string
+  status: 'active' | 'returned'
+  notes?: string
+}
+
 export interface Notification {
   id: string
   title: string
@@ -60,4 +69,13 @@ export interface Notification {
   type: 'info' | 'warning' | 'error' | 'success'
   read: boolean
   created_at: string
+}
+
+export interface User {
+  id: string
+  email: string
+  role: 'admin' | 'staff'
+  name?: string
+  created_at: string
+  updated_at: string
 }
