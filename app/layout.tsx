@@ -1,32 +1,28 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Virtual Staffing Solution - IT Assets Management',
+  title: 'IT Assets Management System - Virtual Staffing Solution',
   description: 'Professional IT Assets Management System for Virtual Staffing Solutions',
-}
+  keywords: 'IT Assets, Management System, Virtual Staffing, Admin Portal',
+  authors: [{ name: 'AinodeArt' }],
+  viewport: 'width=device-width, initial-scale=1',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
-      <body style={{ 
-        margin: 0, 
-        padding: 0, 
-        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        fontSmooth: 'antialiased',
-        WebkitFontSmoothing: 'antialiased'
-      }}>
+      <body style={{ margin: 0, padding: 0, boxSizing: 'border-box' }}>
         {children}
       </body>
     </html>
-  )
+  );
 }
