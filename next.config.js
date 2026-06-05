@@ -1,11 +1,9 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Clean configuration for Next.js 16
+  experimental: {
+    // Future optimizations can go here
+  }
 }
 
 module.exports = nextConfig
