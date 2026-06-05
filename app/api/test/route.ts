@@ -1,48 +1,25 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
+    // Basic environment check
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     
-    // Test 1: Basic query
-    const { data: assets, error: assetsError } = await supabase
-      .from('assets')
-      .select('*')
-      .limit(3)
-
-    if (assetsError) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Database Error',
-        message: assetsError.message,
-        details: assetsError,
-        timestamp: new Date().toISOString()
-      })
-    }
-
-    // Test 2: Count query
-    const { count, error: countError } = await supabase
-      .from('assets')
-      .select('*', { count: 'exact', head: true })
-
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Database connected successfully!',
-      assetCount: count || 0,
-      sampleAssets: assets || [],
+    return NextResponse.json({
+      success: true,
+      message: 'API endpoint working!',
       timestamp: new Date().toISOString(),
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      env: {
+        supabaseUrl: supabaseUrl ? 'Set' : 'Missing',
+        supabaseKey: supabaseKey ? 'Set' : 'Missing',
+        nodeEnv: process.env.NODE_ENV
+      }
     })
-
   } catch (error: any) {
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Unexpected Error',
-      message: error.message,
-      stack: error.stack,
+    return NextResponse.json({
+      success: false,
+      error: error.message,
       timestamp: new Date().toISOString()
     })
   }
