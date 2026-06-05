@@ -1,5 +1,8 @@
-echo node_modules/ >> .gitignore
-echo .next/ >> .gitignore
-echo .env >> .gitignore
-echo .env.local >> .gitignore
-lib/supabase
+.next/
+node_modules/
+.env.local
+.env*.local
+node_modules
+node_modules
+node_modules
+node_modules

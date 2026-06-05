@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
           Forgot Password
         </h1>
         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          Enter your email and we’ll send you a reset link.
+          Enter your email and we'll send you a reset link.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">

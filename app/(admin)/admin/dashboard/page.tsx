@@ -6,7 +6,7 @@ import MonthlyAssignment from '@/components/dashboard/MonthlyAssignment';
 import InspectionOverview from '@/components/dashboard/InspectionOverview';
 import {
   ComputerDesktopIcon, CubeIcon, ArchiveBoxIcon,
-  WrenchIcon, TrashIcon, UsersIcon, UserCheckIcon,
+  WrenchIcon, TrashIcon, UsersIcon, CheckBadgeIcon,
   UserMinusIcon, CurrencyRupeeIcon,
 } from '@heroicons/react/24/outline';
 import { formatCurrency } from '@/lib/utils';
@@ -71,7 +71,7 @@ export default async function AdminDashboard() {
     { title: 'Total Staff', value: totalStaff ?? 0,
       icon: UsersIcon, color: 'from-purple-500 to-purple-600', delay: 5 },
     { title: 'Active Staff', value: activeStaff ?? 0,
-      icon: UserCheckIcon, color: 'from-teal-500 to-teal-600', delay: 6 },
+      icon: CheckBadgeIcon, color: 'from-teal-500 to-teal-600', delay: 6 },
     { title: 'Inactive Staff', value: inactiveStaff ?? 0,
       icon: UserMinusIcon, color: 'from-gray-500 to-gray-600', delay: 7 },
     { title: 'Total Asset Value',
