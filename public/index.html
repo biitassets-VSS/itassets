@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Assets Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
+            color: white;
+            margin: 0;
+            padding: 50px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 600px;
+        }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        p { font-size: 1.5rem; margin-bottom: 2rem; }
+        .buttons { margin: 20px 0; }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #555; }
+        .admin { background: #0066cc; }
+        .staff { background: #00aa55; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 IT Assets Management</h1>
+        <p>Virtual Staffing Solution</p>
+        
+        <div class="buttons">
+            <a href="/admin/login" class="btn admin">🔐 Admin Login</a>
+            <a href="/staff/login" class="btn staff">👥 Staff Login</a>
+        </div>
+        
+        <div>
+            <p>📊 Asset Management</p>
+            <p>👤 User Management</p>
+            <p>📱 Mobile Ready</p>
+        </div>
+    </div>
+</body>
+</html>
