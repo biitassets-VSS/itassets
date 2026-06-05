@@ -1,15 +1,22 @@
 export default function StaffLoginPage() {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Temporary redirect for demo
+    window.location.href = '/staff-dashboard'
+  }
+
   return (
     <div className="min-h-screen bg-green-900 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-2xl font-bold mb-6 text-center">Staff Login</h1>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input 
               type="email" 
               className="w-full p-3 border rounded-md"
               placeholder="staff@company.com"
+              required
             />
           </div>
           <div>
@@ -18,6 +25,7 @@ export default function StaffLoginPage() {
               type="password" 
               className="w-full p-3 border rounded-md"
               placeholder="Enter password"
+              required
             />
           </div>
           <button 

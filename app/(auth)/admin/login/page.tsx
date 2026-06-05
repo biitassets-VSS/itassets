@@ -1,15 +1,22 @@
 export default function AdminLoginPage() {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Temporary redirect for demo
+    window.location.href = '/admin-dashboard'
+  }
+
   return (
     <div className="min-h-screen bg-blue-900 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-2xl font-bold mb-6 text-center">Admin Login</h1>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input 
               type="email" 
               className="w-full p-3 border rounded-md"
               placeholder="admin@company.com"
+              required
             />
           </div>
           <div>
@@ -18,6 +25,7 @@ export default function AdminLoginPage() {
               type="password" 
               className="w-full p-3 border rounded-md"
               placeholder="Enter password"
+              required
             />
           </div>
           <button 
