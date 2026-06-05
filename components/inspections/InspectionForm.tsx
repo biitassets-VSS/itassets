@@ -148,3 +148,82 @@ export default function InspectionForm({ assignments, staffId, onSuccess }: Prop
               onClick={() => setForm(f => ({ ...f, condition_status: c }))}
               className={`p-3 rounded-xl border-2 text-sm font-medium transition-all
                 ${form.condition_status === c
+                  ? CONDITION_COLORS[c] + ' border-indigo-500'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Photo Uploads */}
+      {[0, 1, 2].map(index => (
+        <div key={index}>
+          <label className="block text-xs font-medium text-gray-600
+                            dark:text-gray-400 mb-1">
+            Photo {index + 1} {index === 0 ? '*' : '(optional)'}
+          </label>
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            onChange={e => {
+              const file = e.target.files?.[0];
+              if (file && validateImage(file)) {
+                const newPhotos = [...photos];
+                newPhotos[index] = file;
+                setPhotos(newPhotos);
+              }
+            }}
+            className={`w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4
+              file:rounded-lg file:border-0 file:text-sm file:font-medium
+              file:bg-indigo-50 dark:file:bg-indigo-950 file:text-indigo-700
+              dark:file:text-indigo-300 hover:file:bg-indigo-100
+              ${photos[index] ? 'file:bg-green-50 dark:file:bg-green-950 file:text-green-700' : ''}`}
+          />
+          {photos[index] && (
+            <p className="text-xs text-green-600 mt-1">{photos[index]!.name}</p>
+          )}
+        </div>
+      ))}
+
+      {/* Notes */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600
+                          dark:text-gray-400 mb-1">Notes</label>
+        <textarea
+          value={form.notes}
+          onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+          rows={3}
+          placeholder="Describe any issues or observations..."
+          className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      {/* Comments */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600
+                          dark:text-gray-400 mb-1">Comments</label>
+        <textarea
+          value={form.comments}
+          onChange={e => setForm(f => ({ ...f, comments: e.target.value }))}
+          rows={2}
+          placeholder="Additional comments..."
+          className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500
+                   disabled:bg-indigo-300 text-white font-medium rounded-xl
+                   transition-all shadow-lg shadow-indigo-500/20"
+      >
+        {loading ? 'Submitting...' : 'Submit Inspection'}
+      </button>
+    </form>
+  );
+}
