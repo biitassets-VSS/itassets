@@ -8,42 +8,28 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate loading
     setTimeout(() => setIsLoading(false), 2000);
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background with animated gradient */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"
-        style={{
-          background: `
-            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(120, 119, 255, 0.2) 0%, transparent 50%),
-            linear-gradient(135deg, #1e1b4b 0%, #581c87 25%, #7c2d12 50%, #1e1b4b 100%)
-          `
-        }}
-      >
-        {/* Floating particles */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white/20 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
+    <div className="min-h-screen relative overflow-hidden bg-animated-gradient">
+      {/* Floating particles */}
+      <div className="absolute inset-0">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="particle animate-pulse-custom"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 3}s`
+            }}
+          />
+        ))}
       </div>
 
       {/* Main content */}
@@ -52,12 +38,12 @@ export default function Home() {
           
           {/* Logo and branding */}
           <div className="text-center mb-8 animate-fade-in">
-            <div className="inline-flex items-center justify-center w-20 h-20 mb-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+            <div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-2xl shadow-2xl logo-container">
               <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 text-gradient">
               Virtual Staffing Solution
             </h1>
             <p className="text-purple-200 text-sm tracking-widest uppercase font-medium opacity-90">
@@ -66,7 +52,7 @@ export default function Home() {
           </div>
 
           {/* Glassmorphism login card */}
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-8 animate-slide-up">
+          <div className="glass-card rounded-3xl shadow-2xl p-8 animate-slide-up">
             {/* Card header */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">Admin Portal</h2>
@@ -91,7 +77,7 @@ export default function Home() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full pl-12 pr-4 py-4 glass-input rounded-xl text-white placeholder-purple-300 focus:outline-none transition-all duration-300"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -112,7 +98,7 @@ export default function Home() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-12 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full pl-12 pr-12 py-4 glass-input rounded-xl text-white placeholder-purple-300 focus:outline-none transition-all duration-300"
                     placeholder="••••••••••"
                   />
                   <button
@@ -145,13 +131,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`
-                  w-full py-4 px-6 rounded-xl font-semibold text-white text-lg
-                  bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500
-                  shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]
-                  transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50
-                  ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}
-                `}
+                className={`w-full py-4 px-6 rounded-xl font-semibold text-white text-lg gradient-button shadow-lg hover:shadow-xl focus:outline-none ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -181,30 +161,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
-        }
-        
-        .animate-fade-in-delay {
-          animation: fade-in 0.8s ease-out 0.3s both;
-        }
-        
-        .animate-slide-up {
-          animation: slide-up 0.6s ease-out 0.2s both;
-        }
-      `}</style>
     </div>
   );
 }
