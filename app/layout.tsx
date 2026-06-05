@@ -1,9 +1,13 @@
+import { Inter } from 'next/font/google'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/toaster'
 import './globals.css'
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'IT Assets Management System - Virtual Staffing Solution',
-  description: 'Professional IT Assets Management System for Virtual Staffing Solutions',
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata = {
+  title: 'Virtual Staffing Solution - IT Assets Management',
+  description: 'Complete IT Assets Management System for Virtual Staffing Solution',
 }
 
 export default function RootLayout({
@@ -12,8 +16,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

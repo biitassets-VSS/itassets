@@ -1,224 +1,243 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { Package, Shield, Users, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function Home() {
-  const [email, setEmail] = useState('lakhwinder.bi@outlook.com')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState('')
+const features = [
+  {
+    icon: Package,
+    title: 'Asset Tracking',
+    description: 'Complete lifecycle management of all IT assets with QR codes and real-time tracking.',
+  },
+  {
+    icon: Users,
+    title: 'Staff Management',
+    description: 'Efficient staff onboarding and management with role-based access control.',
+  },
+  {
+    icon: Shield,
+    title: 'Security & Compliance',
+    description: 'Enterprise-grade security with audit trails and compliance reporting.',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Analytics Dashboard',
+    description: 'Comprehensive insights and analytics for informed decision making.',
+  },
+]
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setMessage('')
+const benefits = [
+  'Real-time asset tracking and monitoring',
+  'Automated inspection reminders',
+  'Complete audit trail and history',
+  'Mobile-friendly responsive design',
+  'Role-based access control',
+  'Comprehensive reporting system',
+]
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      if (email === 'lakhwinder.bi@outlook.com' && password.length >= 6) {
-        setMessage('success:Login successful! Welcome to IT Assets Management System.')
-        setTimeout(() => {
-          setMessage('success:Redirecting to dashboard...')
-        }, 1000)
-      } else {
-        setMessage('error:Invalid credentials. Please check your email and password.')
-      }
-    } catch (error) {
-      setMessage('error:An error occurred. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleForgotPassword = () => {
-    if (!email.trim()) {
-      setMessage('error:Please enter your email address first.')
-      return
-    }
-    
-    setMessage(`success:Password reset instructions will be sent to: ${email}`)
-    setTimeout(() => setMessage(''), 5000)
-  }
-
-  const messageType = message.startsWith('success:') ? 'success' : 'error'
-  const messageText = message.replace(/^(success:|error:)/, '')
-
+export default function HomePage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(180deg, #7c3aed 0%, #8b5cf6 50%, #7c3aed 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1rem'
-    }}>
-      <div style={{ width: '100%', maxWidth: '480px' }}>
-        
-        {/* Logo Section */}
-        <div className="text-center mb-8 fade-in">
-          <div style={{
-            width: '80px',
-            height: '80px',
-            background: 'linear-gradient(145deg, #60a5fa 0%, #8b5cf6 100%)',
-            borderRadius: '20px',
-            margin: '0 auto 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
-          }}>
-            <svg 
-              style={{ width: '40px', height: '40px', color: 'white' }} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" 
-              />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-4 responsive-title" style={{
-            letterSpacing: '-0.025em',
-            lineHeight: '1.2'
-          }}>
-            Virtual Staffing Solution
-          </h1>
-          <p className="text-purple-200 text-sm font-medium tracking-widest uppercase opacity-90">
-            IT ASSETS MANAGEMENT SYSTEM
-          </p>
-        </div>
-
-        {/* Login Card */}
-        <div className="glass-card responsive-card">
-          <h2 className="text-3xl font-semibold text-white text-center mb-8">
-            Admin Login
-          </h2>
-
-          {/* Message Display */}
-          {message && (
-            <div className={`message ${messageType === 'success' ? 'message-success' : 'message-error'}`}>
-              {messageText}
-            </div>
-          )}
-          
-          <form onSubmit={handleSubmit}>
-            <div className="gap-6">
-              
-              {/* Email Field */}
-              <div className="mb-6">
-                <label className="block text-purple-200 text-sm font-medium mb-2" htmlFor="email">
-                  Admin Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-field"
-                  placeholder="lakhwinder.bi@outlook.com"
-                  required
-                  disabled={isLoading}
-                />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
+      {/* Navigation */}
+      <nav className="border-b bg-white/80 backdrop-blur-sm dark:bg-gray-900/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <Package className="h-8 w-8 text-primary" />
+              <div>
+                <h1 className="text-xl font-bold">Virtual Staffing Solution</h1>
+                <p className="text-xs text-muted-foreground">IT Assets Management System</p>
               </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/auth/admin/login">
+                <Button variant="outline">Admin Login</Button>
+              </Link>
+              <Link href="/auth/staff/login">
+                <Button>Staff Login</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-              {/* Password Field */}
-              <div className="mb-6">
-                <label className="block text-purple-200 text-sm font-medium mb-2" htmlFor="password">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="input-password"
-                    placeholder="••••••••••"
-                    required
-                    disabled={isLoading}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: 'absolute',
-                      right: '1rem',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: '#c4b5fd',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                    disabled={isLoading}
-                  >
-                    <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </button>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                Welcome to
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                  Virtual Staffing Solution
+                </span>
+              </h1>
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                Complete IT Assets Management System designed for modern organizations. 
+                Track, manage, and optimize your IT assets with powerful analytics and automation.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/auth/admin/login">
+                  <Button size="lg" className="w-full sm:w-auto">
+                    Admin Dashboard
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/auth/staff/login">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                    Staff Portal
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Animated Dashboard Preview */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="mt-16"
+            >
+              <div className="relative max-w-4xl mx-auto">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 border">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="text-center">
+                      <CardContent className="pt-6">
+                        <Package className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                        <div className="text-2xl font-bold">1,247</div>
+                        <div className="text-sm text-muted-foreground">Total Assets</div>
+                      </CardContent>
+                    </Card>
+                    <Card className="text-center">
+                      <CardContent className="pt-6">
+                        <Users className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                        <div className="text-2xl font-bold">89</div>
+                        <div className="text-sm text-muted-foreground">Active Staff</div>
+                      </CardContent>
+                    </Card>
+                    <Card className="text-center">
+                      <CardContent className="pt-6">
+                        <Shield className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                        <div className="text-2xl font-bold">₹ 45L</div>
+                        <div className="text-sm text-muted-foreground">Asset Value</div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
-
-              {/* Forgot Password */}
-              <div className="mb-6" style={{ textAlign: 'right' }}>
-                <button 
-                  type="button"
-                  onClick={handleForgotPassword}
-                  className="btn-secondary"
-                  disabled={isLoading}
-                >
-                  Forgot Password?
-                </button>
-              </div>
-
-              {/* Submit Button */}
-              <div className="mb-6">
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="spinner"></div>
-                      <span>Signing in...</span>
-                    </>
-                  ) : (
-                    'Sign In as Admin'
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-
-          {/* Staff Login Link */}
-          <div className="text-center mt-8">
-            <button 
-              onClick={() => setMessage('success:Staff login portal coming soon!')}
-              className="btn-secondary"
-              disabled={isLoading}
-            >
-              Staff Member? Login here
-            </button>
+            </motion.div>
           </div>
         </div>
+      </section>
 
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <p style={{ color: 'rgba(196, 181, 253, 0.6)', fontSize: '0.75rem' }}>
-            © 2026 Virtual Staffing Solution. All rights reserved.
-          </p>
+      {/* Features Section */}
+      <section className="py-20 bg-white/50 dark:bg-gray-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Powerful Features for Modern Asset Management
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Everything you need to manage your IT assets efficiently and effectively
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <feature.icon className="h-12 w-12 text-primary mb-4" />
+                    <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                Why Choose Our Asset Management System?
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+                Built specifically for Virtual Staffing Solution, our system provides comprehensive 
+                asset management capabilities with enterprise-grade security and reliability.
+              </p>
+              
+              <div className="space-y-4">
+                {benefits.map((benefit, index) => (
+                  <motion.div
+                    key={benefit}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="flex items-center space-x-3"
+                  >
+                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+                <p className="text-blue-100 mb-6">
+                  Join hundreds of organizations already using our asset management system to 
+                  streamline their operations and improve efficiency.
+                </p>
+                <div className="space-y-3">
+                  <Link href="/auth/admin/login">
+                    <Button variant="secondary" className="w-full">
+                      Access Admin Dashboard
+                    </Button>
+                  </Link>
+                  <Link href="/auth/staff/login">
+                    <Button variant="outline" className="w-full bg-transparent border-white text-white hover:bg-white hover:text-gray-900">
+                      Staff Login Portal
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-gray-600 dark:text-gray-400">
+              © Copyright Reserved AinodeArt 2026 - Virtual Staffing Solution IT Assets Management System
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
