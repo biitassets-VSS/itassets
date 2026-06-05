@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2015",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "target": "ES2020",
     "useDefineForClassFields": true,
     "strict": false,
@@ -13,17 +17,32 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "isolatedModules": true,
     "module": "esnext",
-    "types": ["node"],
-    "typeRoots": ["./node_modules/@types"],
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "suppressImplicitAnyIndexErrors": true,
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
