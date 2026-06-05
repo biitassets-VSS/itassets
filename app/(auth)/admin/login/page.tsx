@@ -1,3 +1,6 @@
+
+"use client"
+
 export default function AdminLoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
