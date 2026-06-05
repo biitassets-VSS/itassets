@@ -1,17 +1,14 @@
-﻿import { Inter } from 'next/font/google'
-import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+﻿import './globals.css'
 
 export const metadata = {
   title: 'IT Assets Management System',
-  description: 'Virtual Staffing Solution - IT Assets Management System',
+  description: 'Virtual Staffing Solution - IT Assets Management',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         {children}
       </body>
     </html>
