@@ -1,140 +1,181 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { Eye, Edit, Trash2, QrCode, Search, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatCurrency, formatDate, getStatusColor } from '@/lib/utils'
+import { formatCurrency, formatDate, getStatusColor, capitalizeFirst } from '@/lib/utils'
 import type { Asset } from '@/types'
 
 interface AssetTableProps {
-  assets: Asset[]
-  onDelete?: (id: string) => void
+  assets?: Asset[]
+  onEdit?: (asset: Asset) => void
+  onDelete?: (assetId: string) => void
+  onAssign?: (assetId: string) => void
 }
 
-export function AssetTable({ assets, onDelete }: AssetTableProps) {
+export default function AssetTable({ assets = [], onEdit, onDelete, onAssign }: AssetTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string>('all')
 
+  // Filter assets based on search term and status
   const filteredAssets = assets.filter(asset => {
-    const matchesSearch = 
-      asset.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      asset.asset_tag.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      asset.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      asset.model?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         asset.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         asset.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         asset.serial_number?.toLowerCase().includes(searchTerm.toLowerCase())
     
-    const matchesStatus = !statusFilter || asset.status === statusFilter
-
+    const matchesStatus = statusFilter === 'all' || asset.status === statusFilter
+    
     return matchesSearch && matchesStatus
   })
+
+  if (!assets || assets.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Assets</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Assets Found</h3>
+            <p className="text-gray-600 mb-4">Get started by adding your first asset to the system.</p>
+            <Button onClick={() => window.location.href = '/admin/assets/new'}>
+              Add First Asset
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Assets</CardTitle>
-          <div className="flex items-center space-x-2">
-            <div className="relative">
-              <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search assets..."
-                className="pl-8 w-64"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <CardTitle>Assets ({assets.length})</CardTitle>
+        
+        {/* Search and Filter Controls */}
+        <div className="flex gap-4 mt-4">
+          <div className="flex-1">
+            <Input
+              placeholder="Search assets..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div>
             <select
-              className="px-3 py-2 border border-input rounded-md bg-background"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
+              className="flex h-10 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All Status</option>
-              <option value="in_stock">In Stock</option>
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
               <option value="assigned">Assigned</option>
-              <option value="repair">Repair</option>
-              <option value="disposed">Disposed</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="inactive">Inactive</option>
+              <option value="retired">Retired</option>
             </select>
-            <Link href="/admin/assets/add">
-              <Button>Add Asset</Button>
-            </Link>
           </div>
         </div>
       </CardHeader>
+      
       <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-2">Asset Tag</th>
-                <th className="text-left p-2">Name</th>
-                <th className="text-left p-2">Category</th>
-                <th className="text-left p-2">Brand</th>
-                <th className="text-left p-2">Status</th>
-                <th className="text-left p-2">Current Holder</th>
-                <th className="text-left p-2">Purchase Price</th>
-                <th className="text-left p-2">Purchase Date</th>
-                <th className="text-left p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAssets.map((asset) => (
-                <tr key={asset.id} className="border-b hover:bg-muted/50">
-                  <td className="p-2 font-mono">{asset.asset_tag}</td>
-                  <td className="p-2 font-medium">{asset.name}</td>
-                  <td className="p-2">{asset.category?.name}</td>
-                  <td className="p-2">{asset.brand}</td>
-                  <td className="p-2">
-                    <Badge className={getStatusColor(asset.status)}>
-                      {asset.status.replace('_', ' ').toUpperCase()}
-                    </Badge>
-                  </td>
-                  <td className="p-2">{asset.holder?.name || '-'}</td>
-                  <td className="p-2">
-                    {asset.purchase_price ? formatCurrency(asset.purchase_price) : '-'}
-                  </td>
-                  <td className="p-2">
-                    {asset.purchase_date ? formatDate(asset.purchase_date) : '-'}
-                  </td>
-                  <td className="p-2">
-                    <div className="flex items-center space-x-1">
-                      <Link href={`/admin/assets/${asset.id}`}>
-                        <Button variant="ghost" size="icon">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                      <Link href={`/admin/assets/${asset.id}/edit`}>
-                        <Button variant="ghost" size="icon">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                      <Button variant="ghost" size="icon">
-                        <QrCode className="h-4 w-4" />
-                      </Button>
-                      {onDelete && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          onClick={() => onDelete(asset.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </td>
+        {filteredAssets.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No assets match your search criteria.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left p-4 font-medium text-gray-900">Asset</th>
+                  <th className="text-left p-4 font-medium text-gray-900">Category</th>
+                  <th className="text-left p-4 font-medium text-gray-900">Status</th>
+                  <th className="text-left p-4 font-medium text-gray-900">Value</th>
+                  <th className="text-left p-4 font-medium text-gray-900">Assigned To</th>
+                  <th className="text-left p-4 font-medium text-gray-900">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {filteredAssets.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No assets found
-            </div>
-          )}
-        </div>
+              </thead>
+              <tbody>
+                {filteredAssets.map((asset) => (
+                  <tr key={asset.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="p-4">
+                      <div>
+                        <div className="font-medium text-gray-900">{asset.name}</div>
+                        <div className="text-sm text-gray-600">
+                          {asset.brand} {asset.model}
+                        </div>
+                        {asset.serial_number && (
+                          <div className="text-xs text-gray-500">
+                            SN: {asset.serial_number}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <Badge variant="secondary">
+                        {capitalizeFirst(asset.category)}
+                      </Badge>
+                    </td>
+                    <td className="p-4">
+                      <Badge className={getStatusColor(asset.status)}>
+                        {capitalizeFirst(asset.status)}
+                      </Badge>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm">
+                        {formatCurrency(asset.purchase_price)}
+                      </div>
+                      {asset.purchase_date && (
+                        <div className="text-xs text-gray-500">
+                          {formatDate(asset.purchase_date)}
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm">
+                        {asset.assigned_to || 'Unassigned'}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex gap-2">
+                        {onEdit && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onEdit(asset)}
+                          >
+                            Edit
+                          </Button>
+                        )}
+                        {onAssign && asset.status === 'active' && (
+                          <Button
+                            size="sm"
+                            onClick={() => onAssign(asset.id)}
+                          >
+                            Assign
+                          </Button>
+                        )}
+                        {onDelete && (
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => onDelete(asset.id)}
+                          >
+                            Delete
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
