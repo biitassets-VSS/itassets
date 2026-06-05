@@ -1,4 +1,11 @@
-﻿export default function Home() {
+﻿'use client';
+
+import { useState } from 'react';
+
+export default function Home() {
+  const [adminHover, setAdminHover] = useState(false);
+  const [staffHover, setStaffHover] = useState(false);
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -79,7 +86,7 @@
               width: '100%',
               padding: '16px 24px',
               margin: '0 0 16px 0',
-              background: 'rgba(59, 130, 246, 0.9)',
+              background: adminHover ? 'rgba(37, 99, 235, 1)' : 'rgba(59, 130, 246, 0.9)',
               color: 'white',
               textDecoration: 'none',
               borderRadius: '12px',
@@ -88,18 +95,12 @@
               transition: 'all 0.3s ease',
               border: 'none',
               cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)'
+              boxShadow: adminHover ? '0 6px 20px rgba(59, 130, 246, 0.6)' : '0 4px 15px rgba(59, 130, 246, 0.4)',
+              transform: adminHover ? 'translateY(-2px)' : 'translateY(0)',
+              boxSizing: 'border-box'
             }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(37, 99, 235, 1)';
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(59, 130, 246, 0.9)';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.4)';
-            }}
+            onMouseEnter={() => setAdminHover(true)}
+            onMouseLeave={() => setAdminHover(false)}
           >
             🔐 Admin Login
           </a>
@@ -112,7 +113,7 @@
               width: '100%',
               padding: '16px 24px',
               margin: '0',
-              background: 'rgba(16, 185, 129, 0.9)',
+              background: staffHover ? 'rgba(5, 150, 105, 1)' : 'rgba(16, 185, 129, 0.9)',
               color: 'white',
               textDecoration: 'none',
               borderRadius: '12px',
@@ -121,18 +122,12 @@
               transition: 'all 0.3s ease',
               border: 'none',
               cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)'
+              boxShadow: staffHover ? '0 6px 20px rgba(16, 185, 129, 0.6)' : '0 4px 15px rgba(16, 185, 129, 0.4)',
+              transform: staffHover ? 'translateY(-2px)' : 'translateY(0)',
+              boxSizing: 'border-box'
             }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(5, 150, 105, 1)';
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(16, 185, 129, 0.9)';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.4)';
-            }}
+            onMouseEnter={() => setStaffHover(true)}
+            onMouseLeave={() => setStaffHover(false)}
           >
             👥 Staff Login
           </a>
