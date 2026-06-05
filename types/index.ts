@@ -135,3 +135,9 @@ export interface InspectionFormData {
   notes?: string
   photos?: File[]
 }
+export interface Asset {
+  id: string
+  name: string
+  status: string
+  created_at: string
+}
