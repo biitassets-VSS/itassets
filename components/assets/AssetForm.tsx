@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -6,286 +6,142 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { Upload, X } from 'lucide-react'
-import type { AssetFormData, AssetCategory, Asset } from '@/types'
 
-interface AssetFormProps {
-  asset?: Asset
-  categories: AssetCategory[]
-  onSubmit: (data: AssetFormData) => Promise<void>
-  isLoading?: boolean
+interface AssetFormData {
+  name: string
+  category: string
+  brand?: string
+  model?: string
+  serial_number?: string
+  purchase_price?: number
 }
 
-export function AssetForm({ asset, categories, onSubmit, isLoading = false }: AssetFormProps) {
+export default function AssetForm() {
   const router = useRouter()
   const [formData, setFormData] = useState<AssetFormData>({
-    name: asset?.name || '',
-    category_id: asset?.category_id || '',
-    brand: asset?.brand || '',
-    model: asset?.model || '',
-    serial_number: asset?.serial_number || '',
-    purchase_price: asset?.purchase_price || undefined,
-    purchase_date: asset?.purchase_date || '',
-    invoice_number: asset?.invoice_number || '',
-    vendor_name: asset?.vendor_name || '',
-    warranty_start_date: asset?.warranty_start_date || '',
-    warranty_end_date: asset?.warranty_end_date || '',
-    notes: asset?.notes || '',
-    photos: [],
+    name: '',
+    category: '',
   })
-  
-  const [photoPreview, setPhotoPreview] = useState<string[]>([])
 
-  const handleInputChange = (field: keyof AssetFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Asset form submitted:', formData)
+    alert('Asset saved successfully!')
+    router.push('/admin-dashboard')
   }
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    if (files.length > 0) {
-      setFormData(prev => ({ 
-        ...prev, 
-        photos: [...(prev.photos || []), ...files] 
-      }))
-      
-      files.forEach(file => {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          setPhotoPreview(prev => [...prev, e.target?.result as string])
-        }
-        reader.readAsDataURL(file)
-      })
-    }
-  }
-
-  const removePhoto = (index: number) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      photos: prev.photos?.filter((_, i) => i !== index) || []
+      [name]: value === '' ? undefined : value
     }))
-    setPhotoPreview(prev => prev.filter((_, i) => i !== index))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await onSubmit(formData)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Asset Information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="name">Asset Name *</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
-              required
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="category">Category *</Label>
-            <Select value={formData.category_id} onValueChange={(value) => handleInputChange('category_id', value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            <Label htmlFor="brand">Brand</Label>
-            <Input
-              id="brand"
-              value={formData.brand}
-              onChange={(e) => handleInputChange('brand', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="model">Model</Label>
-            <Input
-              id="model"
-              value={formData.model}
-              onChange={(e) => handleInputChange('model', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="serial_number">Serial Number</Label>
-            <Input
-              id="serial_number"
-              value={formData.serial_number}
-              onChange={(e) => handleInputChange('serial_number', e.target.value)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Purchase Details</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="purchase_date">Purchase Date</Label>
-            <Input
-              id="purchase_date"
-              type="date"
-              value={formData.purchase_date}
-              onChange={(e) => handleInputChange('purchase_date', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="purchase_price">Purchase Price (₹)</Label>
-            <Input
-              id="purchase_price"
-              type="number"
-              value={formData.purchase_price || ''}
-              onChange={(e) => handleInputChange('purchase_price', parseFloat(e.target.value))}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="invoice_number">Invoice Number</Label>
-            <Input
-              id="invoice_number"
-              value={formData.invoice_number}
-              onChange={(e) => handleInputChange('invoice_number', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="vendor_name">Vendor Name</Label>
-            <Input
-              id="vendor_name"
-              value={formData.vendor_name}
-              onChange={(e) => handleInputChange('vendor_name', e.target.value)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Warranty Information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="warranty_start_date">Warranty Start Date</Label>
-            <Input
-              id="warranty_start_date"
-              type="date"
-              value={formData.warranty_start_date}
-              onChange={(e) => handleInputChange('warranty_start_date', e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="warranty_end_date">Warranty End Date</Label>
-            <Input
-              id="warranty_end_date"
-              type="date"
-              value={formData.warranty_end_date}
-              onChange={(e) => handleInputChange('warranty_end_date', e.target.value)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Asset Photos</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="photos">Upload Photos</Label>
-              <div className="flex items-center space-x-2">
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-2xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Asset</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Asset Name *</Label>
                 <Input
-                  id="photos"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoUpload}
-                  className="hidden"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter asset name"
                 />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category *</Label>
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                  className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select category</option>
+                  <option value="laptop">Laptop</option>
+                  <option value="desktop">Desktop</option>
+                  <option value="monitor">Monitor</option>
+                  <option value="printer">Printer</option>
+                  <option value="phone">Phone</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <Label htmlFor="brand">Brand</Label>
+                <Input
+                  id="brand"
+                  name="brand"
+                  value={formData.brand || ''}
+                  onChange={handleChange}
+                  placeholder="Enter brand name"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="model">Model</Label>
+                <Input
+                  id="model"
+                  name="model"
+                  value={formData.model || ''}
+                  onChange={handleChange}
+                  placeholder="Enter model"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="serial_number">Serial Number</Label>
+                <Input
+                  id="serial_number"
+                  name="serial_number"
+                  value={formData.serial_number || ''}
+                  onChange={handleChange}
+                  placeholder="Enter serial number"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="purchase_price">Purchase Price</Label>
+                <Input
+                  id="purchase_price"
+                  name="purchase_price"
+                  type="number"
+                  value={formData.purchase_price || ''}
+                  onChange={handleChange}
+                  placeholder="Enter purchase price"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <Button type="submit" className="flex-1">
+                  Save Asset
+                </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => document.getElementById('photos')?.click()}
+                  onClick={() => router.push('/admin-dashboard')}
                 >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload Photos
+                  Cancel
                 </Button>
               </div>
-            </div>
-            
-            {photoPreview.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {photoPreview.map((preview, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={preview}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute -top-2 -right-2 h-6 w-6"
-                      onClick={() => removePhoto(index)}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Additional Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => handleInputChange('notes', e.target.value)}
-              rows={3}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex items-center space-x-4">
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Saving...' : asset ? 'Update Asset' : 'Create Asset'}
-        </Button>
-        <Button type="button" variant="outline" onClick={() => router.back()}>
-          Cancel
-        </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
-    </form>
+    </div>
   )
 }
