@@ -2,22 +2,24 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function StaffLogin() {
-  const [email, setEmail] = useState('');
+export default function AdminLogin() {
+  const [email, setEmail] = useState('lakhwinder.bi@outlook.com');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('Staff login:', { email, password });
-    router.push('/staff/dashboard');
+    console.log('Admin login:', { email, password });
+    // For demo, redirect to home page
+    router.push('/');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-blue-600 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         
+        {/* Logo Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-500 rounded-2xl mb-6">
             <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -33,16 +35,18 @@ export default function StaffLogin() {
           </p>
         </div>
 
+        {/* Login Form */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
           <h2 className="text-2xl font-bold text-white text-center mb-8">
-            Staff Login
+            Admin Login
           </h2>
           
           <form onSubmit={handleLogin} className="space-y-6">
             
+            {/* Email Field */}
             <div>
               <label className="block text-purple-200 text-sm font-medium mb-2">
-                Staff Email
+                Admin Email
               </label>
               <input
                 type="email"
@@ -54,6 +58,7 @@ export default function StaffLogin() {
               />
             </div>
 
+            {/* Password Field */}
             <div>
               <label className="block text-purple-200 text-sm font-medium mb-2">
                 Password
@@ -72,36 +77,50 @@ export default function StaffLogin() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-300 hover:text-white"
                 >
-                  👁️
+                  {showPassword ? '🙈' : '👁️'}
                 </button>
               </div>
             </div>
 
+            {/* Forgot Password */}
             <div className="text-right">
               <button type="button" className="text-purple-200 hover:text-white text-sm">
                 Forgot Password?
               </button>
             </div>
 
+            {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl transition-colors duration-200"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl transition-colors duration-200 transform hover:scale-105"
             >
-              Sign In as Staff
+              Sign In as Admin
             </button>
 
+            {/* Staff Login Link */}
             <div className="text-center">
               <button
                 type="button"
-                onClick={() => router.push('/admin/login')}
-                className="text-purple-200 hover:text-white"
+                onClick={() => router.push('/staff/login')}
+                className="text-purple-200 hover:text-white underline"
               >
-                Admin? Login here
+                Staff Member? Login here
               </button>
             </div>
 
           </form>
         </div>
+
+        {/* Back to Home */}
+        <div className="text-center mt-6">
+          <button
+            onClick={() => router.push('/')}
+            className="text-purple-200 hover:text-white text-sm"
+          >
+            ← Back to Home
+          </button>
+        </div>
+
       </div>
     </div>
   );
