@@ -1,8 +1,8 @@
 ﻿import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'IT Assets Management System',
-  description: 'Virtual Staffing Solution - IT Assets Management',
+  title: 'Virtual Staffing Solution - IT Assets Management',
+  description: 'Professional IT Assets Management System for Virtual Staffing Solutions',
 }
 
 export default function RootLayout({
@@ -14,8 +14,17 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif' }}>
+      <body style={{ 
+        margin: 0, 
+        padding: 0, 
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontSmooth: 'antialiased',
+        WebkitFontSmoothing: 'antialiased'
+      }}>
         {children}
       </body>
     </html>
