@@ -18,11 +18,7 @@ export async function POST(request: NextRequest) {
 
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       const response = NextResponse.json(
-        {
-          success: true,
-          message: 'Admin login successful',
-          role: 'admin'
-        },
+        { success: true, message: 'Login successful', role: 'admin' },
         { status: 200 }
       )
 
