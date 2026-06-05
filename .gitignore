@@ -1,6 +1,4 @@
-﻿node_modules/
-.next/
-.env
-.env.local
-out/
-dist/
+echo node_modules/ >> .gitignore
+echo .next/ >> .gitignore
+echo .env >> .gitignore
+echo .env.local >> .gitignore
