@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Move serverComponentsExternalPackages from experimental to top level
+  // Fixed: Move from experimental.serverComponentsExternalPackages to top-level
   serverExternalPackages: ['@supabase/supabase-js'],
   
-  // Ensure proper static generation
+  // Keep your existing settings
   output: 'standalone',
   trailingSlash: false,
   
-  // Optional: Add webpack config to handle Node.js APIs in edge runtime
+  // Fix Supabase Edge Runtime issues
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -15,14 +15,19 @@ const nextConfig = {
         fs: false,
         net: false,
         tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        buffer: false,
+        util: false,
       };
     }
     return config;
   },
   
-  // Optional: Disable telemetry to avoid the warning
+  // Remove invalid telemetry config
   experimental: {
-    telemetry: false,
+    esmExternals: 'loose',
   },
 }
 
