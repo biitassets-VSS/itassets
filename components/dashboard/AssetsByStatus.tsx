@@ -14,9 +14,7 @@ export default function AssetsByStatus({ data = [] }: AssetsByStatusProps) {
   if (data.length === 0 || total === 0) {
     return (
       <Card>
-        <CardHeader>
-          <CardTitle>Assets by Status</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Assets by Status</CardTitle></CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-32 text-gray-500">
             <p>No status data available</p>
@@ -28,9 +26,7 @@ export default function AssetsByStatus({ data = [] }: AssetsByStatusProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Assets by Status</CardTitle>
-      </CardHeader>
+      <CardHeader><CardTitle>Assets by Status</CardTitle></CardHeader>
       <CardContent>
         <div className="space-y-4">
           {data.map((item) => {
@@ -38,14 +34,10 @@ export default function AssetsByStatus({ data = [] }: AssetsByStatusProps) {
             return (
               <div key={item.name} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Badge className={getStatusColor(item.name.toLowerCase())}>
-                    {item.name}
-                  </Badge>
+                  <Badge className={getStatusColor(item.name.toLowerCase())}>{item.name}</Badge>
                   <div className="text-right">
                     <span className="font-semibold">{item.value}</span>
-                    <span className="text-sm text-gray-500 ml-2">
-                      ({percentage.toFixed(1)}%)
-                    </span>
+                    <span className="text-sm text-gray-500 ml-2">({percentage.toFixed(1)}%)</span>
                   </div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -58,7 +50,6 @@ export default function AssetsByStatus({ data = [] }: AssetsByStatusProps) {
             )
           })}
         </div>
-        
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="text-center">
             <div className="text-2xl font-bold text-gray-900">{total}</div>
