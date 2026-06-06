@@ -33,7 +33,7 @@ export default function AssetList({ assets = [], onEdit }: AssetListProps) {
                 <p className="text-sm text-gray-600">{asset.brand} {asset.model}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className={getStatusColor(asset.status)}>{asset.status}</Badge>
-                  <span className="text-sm text-gray-500">{formatCurrency(asset.purchase_price)}</span>
+                  <span className="text-sm text-gray-500">{formatCurrency(asset.purchase_price ?? 0)}</span>
                 </div>
               </div>
               {onEdit && (
