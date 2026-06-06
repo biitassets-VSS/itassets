@@ -1,4 +1,4 @@
-﻿import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -24,14 +24,6 @@ export function getStatusColor(status: string): string {
   }
 }
 
-export function formatCurrency(amount: number, currency: string = "INR"): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(amount)
-}
 
 export function formatDate(dateString: string | null | undefined): string {
   if (!dateString) return "N/A"
@@ -46,3 +38,17 @@ export function formatDate(dateString: string | null | undefined): string {
   }
 }
 
+
+export function capitalizeFirst(str: string): string {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
+
+export function formatCurrency(amount: number | undefined | null): string {
+  if (amount === undefined || amount === null) return 'N/A'
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }).format(amount)
+}
