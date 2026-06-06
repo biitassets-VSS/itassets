@@ -1,3 +1,4 @@
+// components/layout/AdminSidebar.tsx
 'use client'
 
 import Link from 'next/link'
@@ -6,7 +7,7 @@ import {
   LayoutDashboard,
   Package,
   Users,
-  Assignment,
+  ClipboardList,
   ClipboardCheck,
   Bell,
   FileText,
@@ -35,7 +36,7 @@ const sidebarItems = [
   {
     title: 'Assignments',
     href: '/admin/assignments',
-    icon: Assignment,
+    icon: ClipboardList,
   },
   {
     title: 'Inspections',
