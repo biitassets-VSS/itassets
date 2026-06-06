@@ -32,3 +32,17 @@ export function formatCurrency(amount: number, currency: string = "INR"): string
     maximumFractionDigits: 2,
   }).format(amount)
 }
+
+export function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) return "N/A"
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(new Date(dateString))
+  } catch {
+    return "Invalid Date"
+  }
+}
+
