@@ -1,3 +1,4 @@
+// components/staff/StaffForm.tsx
 'use client'
 
 import { useState } from 'react'
@@ -27,8 +28,8 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
     password: '',
   })
 
-  const handleInputChange = (field: keyof StaffFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+  const handleInputChange = (field: keyof StaffFormData, value: string) => {
+    setFormData((prev: StaffFormData) => ({ ...prev, [field]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,10 +53,10 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
                 onChange={(e) => handleInputChange('emp_code', e.target.value)}
                 placeholder="e.g., EMP001"
                 required
-                disabled={!!staff} // Disable editing for existing staff
+                disabled={!!staff}
               />
             </div>
-            
+
             <div>
               <Label htmlFor="name">Full Name *</Label>
               <Input
@@ -65,7 +66,7 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
                 required
               />
             </div>
-            
+
             <div>
               <Label htmlFor="department">Department *</Label>
               <Select value={formData.department} onValueChange={(value) => handleInputChange('department', value)}>
@@ -83,7 +84,7 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <Label htmlFor="contact_number">Contact Number *</Label>
               <Input
@@ -94,7 +95,7 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
                 required
               />
             </div>
-            
+
             <div>
               <Label htmlFor="email">Email Address *</Label>
               <Input
@@ -103,10 +104,10 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 required
-                disabled={!!staff} // Disable editing email for existing staff
+                disabled={!!staff}
               />
             </div>
-            
+
             <div>
               <Label htmlFor="status">Status</Label>
               <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value as 'active' | 'inactive')}>
@@ -120,7 +121,7 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
               </Select>
             </div>
           </div>
-          
+
           {!staff && (
             <div>
               <Label htmlFor="password">Password *</Label>
@@ -137,7 +138,7 @@ export function StaffForm({ staff, onSubmit, isLoading = false }: StaffFormProps
               </p>
             </div>
           )}
-          
+
           <div className="flex items-center space-x-4 pt-4">
             <Button type="submit" disabled={isLoading}>
               {isLoading ? 'Saving...' : staff ? 'Update Staff Member' : 'Add Staff Member'}
