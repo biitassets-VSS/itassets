@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "IT Assets Management System",
+  description: "Virtual Staffing Solution - IT Assets Management",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -5,8 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* ✅ NO bg class on body — let each page control its own background */}
-      <body className="inter_className" style={{ margin: 0, padding: 0 }}>
+      <body style={{ margin: 0, padding: 0, minHeight: "100vh" }}>
         {children}
       </body>
     </html>
