@@ -20,6 +20,9 @@ interface InspectionFormProps {
 export function InspectionForm({ asset, onSubmit, isLoading = false }: InspectionFormProps) {
   const [formData, setFormData] = useState<InspectionFormData>({
     asset_id: asset.id,
+    inspection_date: new Date().toISOString().split('T')[0],
+    inspector_name: '',
+    status: 'pending',
     condition: 'good',
     working_status: true,
     location: '',
