@@ -72,7 +72,7 @@ export function InspectionForm({ asset, onSubmit, isLoading = false }: Inspectio
       <CardHeader>
         <CardTitle>Weekly Asset Inspection</CardTitle>
         <div className="text-sm text-muted-foreground">
-          Asset: {asset.name} ({asset.asset_tag})
+          Asset: {asset.name}
         </div>
       </CardHeader>
       <CardContent>
