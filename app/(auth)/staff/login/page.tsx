@@ -1,12 +1,14 @@
-
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function StaffLoginPage() {
+  const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Temporary redirect for demo
-    window.location.href = '/staff-dashboard'
-  }
+    e.preventDefault();
+    router.push('/staff-dashboard');
+  };
 
   return (
     <div className="min-h-screen bg-green-900 flex items-center justify-center">
@@ -15,8 +17,8 @@ export default function StaffLoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               className="w-full p-3 border rounded-md"
               placeholder="staff@company.com"
               required
@@ -24,14 +26,14 @@ export default function StaffLoginPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               className="w-full p-3 border rounded-md"
               placeholder="Enter password"
               required
             />
           </div>
-          <button 
+          <button
             type="submit"
             className="w-full bg-green-600 text-white p-3 rounded-md hover:bg-green-700"
           >
@@ -48,5 +50,5 @@ export default function StaffLoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
