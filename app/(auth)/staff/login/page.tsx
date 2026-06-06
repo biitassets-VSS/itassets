@@ -1,5 +1,5 @@
 
-"use client"
+"use client";
 
 export default function StaffLoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
