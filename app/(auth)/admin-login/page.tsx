@@ -1,7 +1,18 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import type { CSSProperties } from 'react'
+
+const styles: Record<string, CSSProperties> = {
+  wrapper: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f0f2f5' },
+  card: { width: '100%', maxWidth: '400px', backgroundColor: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' },
+  error: { backgroundColor: '#ffe3e3', color: '#c0392b', padding: '12px', borderRadius: '6px', marginBottom: '20px', textAlign: 'center' },
+  label: { display: 'block', marginBottom: '6px', fontWeight: 'bold', color: '#444' },
+  input: { width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box' },
+  fieldWrap: { marginBottom: '20px' },
+  fieldWrap2: { marginBottom: '25px' },
+}
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -37,20 +48,26 @@ export default function AdminLoginPage() {
     }
   }
 
+  const btnStyle: CSSProperties = {
+    width: '100%', padding: '14px',
+    backgroundColor: loading ? '#aaa' : '#4361ee',
+    color: 'white', border: 'none', borderRadius: '6px',
+    fontSize: '16px', fontWeight: 'bold',
+    cursor: loading ? 'not-allowed' : 'pointer'
+  }
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
-      <div style={{ width: '100%', maxWidth: '400px', backgroundColor: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+    <div style={styles.wrapper}>
+      <div style={styles.card}>
         <h1 style={{ textAlign: 'center', marginBottom: '30px', color: '#1a1a2e' }}>🔐 Admin Login</h1>
 
         {error && (
-          <div style={{ backgroundColor: '#ffe3e3', color: '#c0392b', padding: '12px', borderRadius: '6px', marginBottom: '20px', textAlign: 'center' }}>
-            ❌ {error}
-          </div>
+          <div style={styles.error}>❌ {error}</div>
         )}
 
         <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold', color: '#444' }}>Email</label>
+          <div style={styles.fieldWrap}>
+            <label style={styles.label}>Email</label>
             <input
               type="email"
               placeholder="Enter admin email"
@@ -58,12 +75,12 @@ export default function AdminLoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box' }}
+              style={styles.input}
             />
           </div>
 
-          <div style={{ marginBottom: '25px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', fontWeight: 'bold', color: '#444' }}>Password</label>
+          <div style={styles.fieldWrap2}>
+            <label style={styles.label}>Password</label>
             <input
               type="password"
               placeholder="Enter admin password"
@@ -71,15 +88,11 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box' }}
+              style={styles.input}
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ width: '100%', padding: '14px', backgroundColor: loading ? '#aaa' : '#4361ee', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer' }}
-          >
+          <button type="submit" disabled={loading} style={btnStyle}>
             {loading ? '⏳ Logging in...' : '🚀 Login as Admin'}
           </button>
         </form>
