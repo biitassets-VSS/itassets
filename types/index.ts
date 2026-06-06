@@ -79,3 +79,19 @@ export interface User {
   created_at: string
   updated_at: string
 }
+export interface InspectionFormData {
+  asset_id: string
+  inspection_date: string
+  inspector_name: string
+  status: string
+  condition: string
+  working_status: boolean
+  location: string
+  notes?: string
+  findings?: string
+  recommendations?: string
+  next_inspection_date?: string
+  photos?: File[]
+  images?: File[]
+}
+
