@@ -1,3 +1,4 @@
+// lib/utils.ts
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -24,6 +25,19 @@ export function getStatusColor(status: string): string {
   }
 }
 
+export function getNotificationColor(type: string): string {
+  switch (type?.toLowerCase()) {
+    case "success":
+      return "bg-green-50 text-green-800 border-green-200"
+    case "warning":
+      return "bg-yellow-50 text-yellow-800 border-yellow-200"
+    case "error":
+      return "bg-red-50 text-red-800 border-red-200"
+    case "info":
+    default:
+      return "bg-blue-50 text-blue-800 border-blue-200"
+  }
+}
 
 export function formatDate(dateString: string | null | undefined): string {
   if (!dateString) return "N/A"
@@ -38,12 +52,10 @@ export function formatDate(dateString: string | null | undefined): string {
   }
 }
 
-
 export function capitalizeFirst(str: string): string {
   if (!str) return ''
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
-
 
 export function formatCurrency(amount: number | undefined | null): string {
   if (amount === undefined || amount === null) return 'N/A'
