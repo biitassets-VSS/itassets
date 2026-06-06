@@ -1,3 +1,5 @@
+// types/index.ts
+
 export interface Asset {
   id: string
   name: string
@@ -20,12 +22,24 @@ export interface Staff {
   id: string
   name: string
   email: string
-  department?: string
+  emp_code: string
+  contact_number: string
+  department: string
   position?: string
   phone?: string
   status: 'active' | 'inactive'
   created_at: string
   updated_at: string
+}
+
+export interface StaffFormData {
+  emp_code: string
+  name: string
+  department: string
+  contact_number: string
+  email: string
+  status: 'active' | 'inactive'
+  password: string
 }
 
 export interface Inspection {
@@ -67,7 +81,7 @@ export interface Notification {
   title: string
   message: string
   type: 'info' | 'warning' | 'error' | 'success'
-  read: boolean
+  is_read: boolean
   created_at: string
 }
 
@@ -79,6 +93,7 @@ export interface User {
   created_at: string
   updated_at: string
 }
+
 export interface InspectionFormData {
   asset_id: string
   inspection_date: string
@@ -94,4 +109,3 @@ export interface InspectionFormData {
   photos?: File[]
   images?: File[]
 }
-
